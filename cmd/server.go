@@ -23,9 +23,7 @@ var startCmd = &cobra.Command{
 	Long:  `start Server`,
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperServer()
-		//cmd.Usage()
 
-		fmt.Println(viper.Get("server.updir").(string))
 		server.Start()
 		fmt.Println("started")
 	},
@@ -61,11 +59,6 @@ func mergeViperServer() {
 	configfile := viper.Get("configfile").(string)
 	viper.SetConfigFile(configfile)
 	viper.ReadInConfig()
-	//err := viper.ReadInConfig()
-	//if err != nil {
-	//	fmt.Println("the config file", configfile, "not exists")
-	//	os.Exit(1)
-	//}
 
 	//如果命令行有配置参数，则使用，否则使用默认值
 	if util.IsEmpty(viper.Get("host")) {
@@ -82,7 +75,6 @@ func mergeViperServer() {
 	} else {
 		viper.Set("server.port", viper.Get("port").(string))
 	}
-	fmt.Println(viper.Get("updir").(string))
 	if util.IsEmpty(viper.Get("updir")) {
 		if !viper.IsSet("server.updir") {
 			viper.Set("server.updir", viper.Get("default.server.updir").(string))
@@ -93,5 +85,4 @@ func mergeViperServer() {
 	if !strings.HasSuffix(viper.Get("server.updir").(string), "/") {
 		viper.Set("server.updir", viper.Get("server.updir").(string)+"/")
 	}
-	fmt.Println(viper.Get("server.updir").(string))
 }

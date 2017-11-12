@@ -49,7 +49,7 @@ var downCmd = &cobra.Command{
 	},
 }
 
-// downCmd represents the client command
+// infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "the info for file from DFS",

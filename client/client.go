@@ -99,10 +99,5 @@ func Info(filekey string, targetUrl string) string {
 	if err != nil {
 		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
-	if resp.StatusCode == 200 {
-		return strings.Replace(string(resp_body), "\n", "", -1)
-	} else {
-
-		return strconv.Itoa(resp.StatusCode) + "," + strings.Replace(string(resp_body), "\n", "", -1)
-	}
+	return strconv.Itoa(resp.StatusCode) + "," + strings.Replace(string(resp_body), "\n", "", -1)
 }
