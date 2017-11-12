@@ -23,9 +23,16 @@ var upCmd = &cobra.Command{
 	Long:  `upload file to DFS`,
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperClient()
+		if util.IsEmpty(viper.Get("client.file")) {
+			fmt.Println("please set file params, eg: --file /tmp/tester.jpg\n")
+			clientCmd.Usage()
+			os.Exit(1)
+		}
 
-		client.Upload(viper.Get("client.file").(string), viper.Get("client.filekey").(string), "http://127.0.0.1:8058/upload")
-		fmt.Println("upload done")
+		response := client.Upload(viper.Get("client.file").(string),
+			viper.Get("client.filekey").(string),
+			viper.Get("client.api").(string)+"/upload")
+		fmt.Println(response)
 	},
 }
 
@@ -35,8 +42,10 @@ var downCmd = &cobra.Command{
 	Short: "download file from DFS",
 	Long:  "download file from DFS",
 	Run: func(cmd *cobra.Command, args []string) {
-		client.Download(viper.Get("client.filekey").(string), "http://127.0.0.1:8058/download")
-		fmt.Println("download done")
+		mergeViperClient()
+		response := client.Download(viper.Get("client.filekey").(string),
+			viper.Get("client.api").(string)+"/download")
+		fmt.Println(response)
 	},
 }
 
@@ -46,8 +55,10 @@ var infoCmd = &cobra.Command{
 	Short: "the info for file from DFS",
 	Long:  "the info for file from DFS",
 	Run: func(cmd *cobra.Command, args []string) {
-		client.Info(viper.Get("client.filekey").(string), "http://127.0.0.1:8058/info")
-		fmt.Println("info done")
+		mergeViperClient()
+		response := client.Info(viper.Get("client.filekey").(string),
+			viper.Get("client.api").(string)+"/info")
+		fmt.Println(response)
 	},
 }
 
@@ -55,12 +66,12 @@ var filekey string
 
 func init() {
 	clientCmd.PersistentFlags().StringP("config-file", "", "/etc/dfs.json", "the file key")
-	clientCmd.PersistentFlags().StringP("host", "H", "", "the host of server")
-	clientCmd.PersistentFlags().StringP("port", "P", "", "the port of server")
+	clientCmd.PersistentFlags().StringP("host", "", "", "the host of server")
+	clientCmd.PersistentFlags().StringP("port", "", "", "the port of server")
 	clientCmd.PersistentFlags().StringP("file-key", "", "", "the file key")
-	upCmd.Flags().StringP("file", "f", "", "the file name, include the path")
+	upCmd.Flags().StringP("file", "", "", "the file name, include the path")
 	downCmd.Flags().StringP("down-dir", "", "", "the path that dowoload file")
-	downCmd.Flags().StringP("file-name", "", "", "download file to the file name, absolute path")
+	downCmd.Flags().StringP("down-file", "", "", "download file to the file name, absolute path")
 
 	viper.BindPFlag("configfile", clientCmd.PersistentFlags().Lookup("config-file"))
 	viper.BindPFlag("host", clientCmd.PersistentFlags().Lookup("host"))
@@ -69,7 +80,7 @@ func init() {
 
 	viper.BindPFlag("client.filekey", clientCmd.PersistentFlags().Lookup("file-key"))
 	viper.BindPFlag("client.file", upCmd.Flags().Lookup("file"))
-	viper.BindPFlag("client.filename", downCmd.Flags().Lookup("file-name"))
+	viper.BindPFlag("client.downfile", downCmd.Flags().Lookup("down-file"))
 	//viper.SetDefault("configfile", "/etc/dfs.json")
 
 	clientCmd.AddCommand(upCmd)
@@ -82,11 +93,7 @@ func mergeViperClient() {
 	//加载配置文件
 	configfile := viper.Get("configfile").(string)
 	viper.SetConfigFile(configfile)
-	err := viper.ReadInConfig()
-	if err != nil {
-		fmt.Println("the config file", configfile, "not exists")
-		os.Exit(1)
-	}
+	viper.ReadInConfig()
 
 	//如果命令行有配置参数，则使用，否则使用默认值
 	if util.IsEmpty(viper.Get("host")) {
@@ -103,7 +110,6 @@ func mergeViperClient() {
 	} else {
 		viper.Set("client.port", viper.Get("port").(string))
 	}
-	fmt.Println(viper.Get("downdir").(string))
 	if util.IsEmpty(viper.Get("downdir")) {
 		if !viper.IsSet("client.downdir") {
 			viper.Set("client.downdir", viper.Get("default.client.downdir").(string))
@@ -111,5 +117,10 @@ func mergeViperClient() {
 	} else {
 		viper.Set("client.downdir", viper.Get("downdir").(string))
 	}
-
+	if util.IsEmpty(viper.Get("client.filekey")) {
+		fmt.Println("please set file-key params, eg: --file-key tester/tester.jpg\n")
+		clientCmd.Usage()
+		os.Exit(1)
+	}
+	viper.Set("client.api", "http://"+viper.Get("client.host").(string)+":"+viper.Get("client.port").(string))
 }

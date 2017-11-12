@@ -3,18 +3,16 @@ package client
 import (
 	"bytes"
 	util "dfs/lib"
-	"fmt"
 	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	os "os"
 	"path"
+	"strconv"
+	"strings"
 )
-
-var logger *log.Logger
 
 func Upload(filename string, filekey string, targetUrl string) string {
 	bodyBuf := &bytes.Buffer{}
@@ -24,25 +22,19 @@ func Upload(filename string, filekey string, targetUrl string) string {
 	//关键的一步操作
 	fileWriter, err := bodyWriter.CreateFormFile("file_upload", filename)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return "101," + err.Error()
 	}
 
 	//打开文件句柄操作
 	fh, err := os.Open(filename)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return "101," + err.Error()
 	}
 
 	//iocopy
 	_, err = io.Copy(fileWriter, fh)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return "101," + err.Error()
 	}
 
 	contentType := bodyWriter.FormDataContentType()
@@ -50,40 +42,30 @@ func Upload(filename string, filekey string, targetUrl string) string {
 
 	resp, err := http.Post(targetUrl, contentType, bodyBuf)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
 	defer resp.Body.Close()
 	resp_body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
-	return string(resp_body)
+	return strconv.Itoa(resp.StatusCode) + "," + strings.Replace(string(resp_body), "\n", "", -1)
 }
 
 func Download(filekey string, targetUrl string) string {
 	resp, err := http.Get(targetUrl + "?filekey=" + filekey)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
 	defer resp.Body.Close()
 	resp_body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		response := "101," + err.Error()
-		logger.Println(response)
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
-	if resp.StatusCode == 701 {
-		response := "701," + string(resp_body)
-		logger.Println(response)
-		return response
+	if resp.StatusCode != 200 {
+		return strconv.Itoa(resp.StatusCode) + "," + strings.Replace(string(resp_body), "\n", "", -1)
 	}
-	destfile := viper.Get("client.filename").(string)
+	destfile := viper.Get("client.downfile").(string)
 	if destfile == "" {
 		destfile = viper.Get("client.downdir").(string) + "/" + filekey
 	}
@@ -95,17 +77,14 @@ func Download(filekey string, targetUrl string) string {
 	defer fh.Close()
 	if err != nil {
 		response := "101," + err.Error()
-		logger.Println(response)
 		return response
 	}
-	fmt.Println(len(resp_body))
 	_, err = fh.Write(resp_body)
 	if err != nil {
 		response := "101," + err.Error()
-		logger.Println(response)
 		return response
 	}
-	return ""
+	return "200,"
 }
 
 func Info(filekey string, targetUrl string) string {
@@ -113,14 +92,17 @@ func Info(filekey string, targetUrl string) string {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		response := "101," + err.Error()
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
 	defer resp.Body.Close()
 	resp_body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		response := "101," + err.Error()
-		return response
+		return strconv.Itoa(resp.StatusCode) + "," + err.Error()
 	}
-	return string(resp_body)
+	if resp.StatusCode == 200 {
+		return strings.Replace(string(resp_body), "\n", "", -1)
+	} else {
+
+		return strconv.Itoa(resp.StatusCode) + "," + strings.Replace(string(resp_body), "\n", "", -1)
+	}
 }

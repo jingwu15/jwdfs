@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	strings "strings"
 
 	util "dfs/lib"
@@ -24,10 +23,11 @@ var startCmd = &cobra.Command{
 	Long:  `start Server`,
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperServer()
+		//cmd.Usage()
 
 		fmt.Println(viper.Get("server.updir").(string))
-		//fmt.Println("started")
 		server.Start()
+		fmt.Println("started")
 	},
 }
 
@@ -60,11 +60,12 @@ func mergeViperServer() {
 	//加载配置文件
 	configfile := viper.Get("configfile").(string)
 	viper.SetConfigFile(configfile)
-	err := viper.ReadInConfig()
-	if err != nil {
-		fmt.Println("the config file", configfile, "not exists")
-		os.Exit(1)
-	}
+	viper.ReadInConfig()
+	//err := viper.ReadInConfig()
+	//if err != nil {
+	//	fmt.Println("the config file", configfile, "not exists")
+	//	os.Exit(1)
+	//}
 
 	//如果命令行有配置参数，则使用，否则使用默认值
 	if util.IsEmpty(viper.Get("host")) {

@@ -1,0 +1,13 @@
+{
+    "server" : {
+        "host":"127.0.0.1",
+        "port":"8058",
+        "updir":"/data/ydfs"
+    },
+    "client": {
+        "host":"127.0.0.1",
+        "port":"8058",
+        "downdir":"/tmp/download"
+    }
+}
+
