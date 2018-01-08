@@ -11,7 +11,7 @@ JW-DFS 使用 json 作为配置文件，默认 /etc/jwdfs.json，易于使用
 sh ./install.sh
 
 # 2. 构建项目
-go build -ldflags "-s -w" dfs dfs
+go build -ldflags "-s -w" jwdfs jwdfs
 ```
 
 #### 2. 配置 /etc/jwdfs.json
