@@ -4,8 +4,8 @@ import (
 	"fmt"
 	strings "strings"
 
-	util "dfs/lib"
-	server "dfs/server"
+	util "jwdfs/lib"
+	server "jwdfs/server"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -39,7 +39,7 @@ var stopCmd = &cobra.Command{
 }
 
 func init() {
-	serverCmd.PersistentFlags().StringP("config-file", "", "/etc/dfs.json", "the config file")
+	serverCmd.PersistentFlags().StringP("config-file", "", "/etc/jwdfs.json", "the config file")
 	startCmd.Flags().StringP("host", "H", "", "the host ip, default 127.0.0.1")
 	startCmd.Flags().StringP("port", "P", "", "the port, default 8058")
 	startCmd.Flags().StringP("up-dir", "", "", "the base path to store file for server, default /tmp/up")

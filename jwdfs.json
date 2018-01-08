@@ -2,7 +2,7 @@
     "server" : {
         "host":"127.0.0.1",
         "port":"8058",
-        "updir":"/data/ydfs"
+        "updir":"/data/jwdfs"
     },
     "client": {
         "host":"127.0.0.1",

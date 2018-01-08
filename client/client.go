@@ -2,7 +2,7 @@ package client
 
 import (
 	"bytes"
-	util "dfs/lib"
+	util "jwdfs/lib"
 	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"

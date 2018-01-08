@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	client "dfs/client"
-	util "dfs/lib"
+	client "jwdfs/client"
+	util "jwdfs/lib"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,8 +19,8 @@ var clientCmd = &cobra.Command{
 // upCmd represents the up command
 var upCmd = &cobra.Command{
 	Use:   "up",
-	Short: "upload file to DFS",
-	Long:  `upload file to DFS`,
+	Short: "upload file to JW-DFS",
+	Long:  `upload file to JW-DFS`,
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperClient()
 		if util.IsEmpty(viper.Get("client.file")) {
@@ -39,8 +39,8 @@ var upCmd = &cobra.Command{
 // downCmd represents the down command
 var downCmd = &cobra.Command{
 	Use:   "down",
-	Short: "download file from DFS",
-	Long:  "download file from DFS",
+	Short: "download file from JW-DFS",
+	Long:  "download file from JW-DFS",
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperClient()
 		response := client.Download(viper.Get("client.filekey").(string),
@@ -52,8 +52,8 @@ var downCmd = &cobra.Command{
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "the info for file from DFS",
-	Long:  "the info for file from DFS",
+	Short: "the info for file from JW-DFS",
+	Long:  "the info for file from JW-DFS",
 	Run: func(cmd *cobra.Command, args []string) {
 		mergeViperClient()
 		response := client.Info(viper.Get("client.filekey").(string),
@@ -65,7 +65,7 @@ var infoCmd = &cobra.Command{
 var filekey string
 
 func init() {
-	clientCmd.PersistentFlags().StringP("config-file", "", "/etc/dfs.json", "the file key")
+	clientCmd.PersistentFlags().StringP("config-file", "", "/etc/jwdfs.json", "the file key")
 	clientCmd.PersistentFlags().StringP("host", "", "", "the host of server")
 	clientCmd.PersistentFlags().StringP("port", "", "", "the port of server")
 	clientCmd.PersistentFlags().StringP("file-key", "", "", "the file key")
@@ -81,7 +81,7 @@ func init() {
 	viper.BindPFlag("client.filekey", clientCmd.PersistentFlags().Lookup("file-key"))
 	viper.BindPFlag("client.file", upCmd.Flags().Lookup("file"))
 	viper.BindPFlag("client.downfile", downCmd.Flags().Lookup("down-file"))
-	//viper.SetDefault("configfile", "/etc/dfs.json")
+	//viper.SetDefault("configfile", "/etc/jwdfs.json")
 
 	clientCmd.AddCommand(upCmd)
 	clientCmd.AddCommand(downCmd)

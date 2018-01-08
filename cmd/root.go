@@ -14,7 +14,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "dfs",
 	Short: "a file server, upload and download",
-	Long:  `DFS is a file upload/download server. You can use it to many computer.`,
+	Long:  `JW-DFS is a file upload/download server. You can use it to many computer.`,
 	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
@@ -43,10 +43,10 @@ func init() {
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 
-	viper.Set("default.configfile", "/etc/dfs.json")
+	viper.Set("default.configfile", "/etc/jwdfs.json")
 	viper.Set("default.server.host", "127.0.0.1")
 	viper.Set("default.server.port", "8058")
-	viper.Set("default.server.updir", "/data/dfs")
+	viper.Set("default.server.updir", "/tmp/jwdfs")
 	viper.Set("default.client.host", "127.0.0.1")
 	viper.Set("default.client.port", "8058")
 	viper.Set("default.client.downdir", "/tmp/download")

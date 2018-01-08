@@ -1,6 +1,6 @@
 package main
 
-import "dfs/cmd"
+import "jwdfs/cmd"
 
 func main() {
 	cmd.Execute()

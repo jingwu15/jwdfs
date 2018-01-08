@@ -1,7 +1,7 @@
 package server
 
 import (
-	dfsutil "dfs/lib"
+	dfsutil "jwdfs/lib"
 	"fmt"
 	"github.com/spf13/viper"
 	"io"
