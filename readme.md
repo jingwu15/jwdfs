@@ -36,17 +36,17 @@ go build -ldflags "-s -w" jwdfs jwdfs
 JW-DFS is a file upload/download server. You can use it to many computer.
 
 Usage:
-  dfs [command]
+  ./jwdfs [command]
 
 Available Commands:
-  client      upload file to DFS
+  client      upload file to JW-DFS
   help        Help about any command
-  server      the DFS Server
-  version     show version for DFS
+  server      the JW-DFS Server
+  version     show version for JW-DFS
 
 Flags:
   -d, --debug string   debug, default false (default "false")
-  -h, --help           help for dfs
+  -h, --help           help for ./jwdfs
 
-Use "dfs [command] --help" for more information about a command.
+Use "./jwdfs [command] --help" for more information about a command.
 ```

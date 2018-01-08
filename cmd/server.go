@@ -13,8 +13,8 @@ import (
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "the DFS Server",
-	Long:  `the DFS Server`,
+	Short: "the JW-DFS Server",
+	Long:  `the JW-DFS Server`,
 }
 
 var startCmd = &cobra.Command{

@@ -12,8 +12,8 @@ import (
 // clientCmd represents the client command
 var clientCmd = &cobra.Command{
 	Use:   "client",
-	Short: "upload file to DFS",
-	Long:  `upload file to DFS`,
+	Short: "upload file to JW-DFS",
+	Long:  `upload file to JW-DFS`,
 }
 
 // upCmd represents the up command

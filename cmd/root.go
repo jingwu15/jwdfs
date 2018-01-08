@@ -12,7 +12,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "dfs",
+	Use:   "./jwdfs",
 	Short: "a file server, upload and download",
 	Long:  `JW-DFS is a file upload/download server. You can use it to many computer.`,
 	//	Run: func(cmd *cobra.Command, args []string) { },
