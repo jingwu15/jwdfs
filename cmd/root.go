@@ -20,8 +20,8 @@ var rootCmd = &cobra.Command{
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "show version for DFS",
-	Long:  `show version for DFS`,
+	Short: "show version for JW-DFS",
+	Long:  `show version for JW-DFS`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("v0.1.0")
 	},
